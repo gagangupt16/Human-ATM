@@ -389,7 +389,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 wr.close();
 
                 if (connection.getResponseCode() == HttpURLConnection.HTTP_OK){
-                                    // Get Response
+
                     InputStream is = connection.getInputStream();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(is));
                     String line;

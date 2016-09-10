@@ -59,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         String amount = mAmountView.getText().toString();
-        System.out.println(amount);
 
         mRequestTask = new RequestTask(Float.parseFloat(amount), this);
         mRequestTask.execute((Void)null);
@@ -130,21 +129,12 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(final Boolean success) {
             mRequestTask = null;
-            System.out.print("Request successful");
-            Intent intent = new Intent(getApplicationContext(),GiverListActivity.class);
-            intent.putExtra("amount",mAmount);
-            startActivity(intent);
 
-//            showProgress(false);
-//
-//            if (success) {
-//                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-//                startActivity(intent);
-//                finish();
-//            } else {
-//                mPasswordView.setError(getString(R.string.error_incorrect_password));
-//                mPasswordView.requestFocus();
-//            }
+            if (success) {
+                Intent intent = new Intent(getApplicationContext(),GiverListActivity.class);
+                intent.putExtra("amount",mAmount);
+                startActivity(intent);
+            }
         }
 
         @Override
