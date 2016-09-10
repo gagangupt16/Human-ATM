@@ -63,7 +63,7 @@ public class ATMFirebaseMessagingService extends FirebaseMessagingService {
             stackBuilder.addParentStack(GiverListActivity.class);
             stackBuilder.addNextIntent(intent);
 
-            if (data.containsKey("payment")){
+            if (data.containsKey("type")){
                 notificationBuilder = new NotificationCompat.Builder(this)
                         .setSmallIcon(R.mipmap.ic_launcher)
                         .setContentTitle(getString(R.string.transferred))
