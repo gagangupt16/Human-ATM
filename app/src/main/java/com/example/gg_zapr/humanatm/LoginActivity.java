@@ -81,7 +81,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private EditText mNameView;
     private View mProgressView;
     private View mLoginFormView;
-    private String BASE_URL = "http://52.66.76.35:8080/atmApp/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -377,7 +376,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
                 Log.i(TAG, json);
 
-                url = new URL(BASE_URL + "registerUser");
+                url = new URL(Constants.BASE_URL + "registerUser");
                 connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("Content-Type", "application/json");
@@ -408,7 +407,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
                     String userId = responseObject.getString("userId");
                     SharedPreferences.Editor editor = sharedPref.edit();
-                    editor.putString("userId", userId);
+                    editor.putString(Constants.USER_ID, userId);
                     editor.apply();
 
                     Log.i(TAG, "Matched: "+ responseStr);
