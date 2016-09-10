@@ -24,12 +24,13 @@ public class GiverListActivity extends AppCompatActivity {
 
     private List<Giver> givers = new ArrayList<>();
     private volatile  boolean isStop = false;
+    private GiverArrayAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_giver_list);
+        adapter = new GiverArrayAdapter(this, givers);
 
-        GiverArrayAdapter adapter = new GiverArrayAdapter(this, givers);
         mGiverList = (ListView) findViewById(R.id.giverListView);
         mGiverList.setAdapter(adapter);
         final float amount = getIntent().getFloatExtra("amount",0);
@@ -49,19 +50,9 @@ public class GiverListActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-//        while(!isStop) {
-//
-//            try {
-//                Thread.sleep(2000);
-//                getGivers();
-//            } catch (ExecutionException e) {
-//                e.printStackTrace();
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        }
+
         try {
-            getGivers();
+            getGivers(adapter);
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -69,26 +60,33 @@ public class GiverListActivity extends AppCompatActivity {
         }
     }
 
-    private void getGivers() throws ExecutionException, InterruptedException {
+
+
+    private void getGivers(GiverArrayAdapter adapter) throws ExecutionException, InterruptedException {
         if (getGiverTask!= null){
             return;
         }
+        ;
+        getGiverTask = new GetGiverTask(adapter);
 
-        getGiverTask = new GetGiverTask();
+         getGiverTask.execute();
 
-        List<Giver> result = getGiverTask.execute().get();
-//        if(result.size()>0){
-//            ProgressBar bar = (ProgressBar)findViewById(R.id.progress_bar1);
-//            bar.setVisibility(View.INVISIBLE);
-//        }
-        givers.clear();
-        givers.addAll(result);
+
 
     }
 
     private class GetGiverTask extends AsyncTask<Void, Void, List<Giver>> {
+        private GiverArrayAdapter adapter;
+        public  GetGiverTask(GiverArrayAdapter adapter){
+            this.adapter = adapter;
+        }
         @Override
         protected List<Giver> doInBackground(Void... voids) {
+            try {
+                Thread.sleep(9000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             Giver testGiver = new Giver();
             testGiver.name = "Hello";
             testGiver.distance = 0.5;
@@ -99,7 +97,13 @@ public class GiverListActivity extends AppCompatActivity {
             givers.add(testGiver);
             return givers;
         }
-
+        protected void onPostExecute(List<Giver> result) {
+            givers.clear();
+            givers.addAll(result);
+            adapter.notifyDataSetChanged();
+            ProgressBar bar = (ProgressBar)findViewById(R.id.progress_bar1);
+            bar.setVisibility(View.INVISIBLE);
+        }
 
         @Override
         protected void onCancelled() {
