@@ -231,6 +231,8 @@ public class PaymentMainActivity extends AppCompatActivity implements View.OnCli
                         }
                     }).show();
         }
+        Intent intent = new Intent(this,MainActivity.class);
+        startActivity(intent);
     }
 
     @Override
@@ -257,7 +259,7 @@ public class PaymentMainActivity extends AppCompatActivity implements View.OnCli
 
     private void navigateToBaseActivity(float amount){
         String mandatoryKeys[] = { PayuConstants.KEY, PayuConstants.AMOUNT, PayuConstants.PRODUCT_INFO, PayuConstants.FIRST_NAME, PayuConstants.EMAIL, PayuConstants.TXNID, PayuConstants.SURL, PayuConstants.FURL, PayuConstants.USER_CREDENTIALS, PayuConstants.UDF1, PayuConstants.UDF2, PayuConstants.UDF3, PayuConstants.UDF4, PayuConstants.UDF5, PayuConstants.ENV, PayuConstants.STORE_ONE_CLICK_HASH, PayuConstants.SMS_PERMISSION};
-        String mandatoryValues[] = { merchantKey, "10.0", "myproduct", "firstname", "me@itsme.com", ""+System.currentTimeMillis(), "https://payu.herokuapp.com/success", "https://payu.herokuapp.com/failure", merchantKey+":payutest@payu.in", "udf1", "udf2", "udf3", "udf4", "udf5", ""+env, ""+ PayuConstants.STORE_ONE_CLICK_HASH_SERVER, smsPermission.toString() };
+        String mandatoryValues[] = { merchantKey, "10.0", "myproduct", "firstname", "me@itsme.com", ""+System.currentTimeMillis(), "http://52.66.76.35:16080/atmApp/dummy", "https://payu.herokuapp.com/failure", merchantKey+":payutest@payu.in", "udf1", "udf2", "udf3", "udf4", "udf5", ""+env, ""+ PayuConstants.STORE_ONE_CLICK_HASH_SERVER, smsPermission.toString() };
         intent = new Intent(this, PayUBaseActivity.class);
 //        LinearLayout rowContainerLayout = (LinearLayout) findViewById(R.id.linear_layout_row_container);
         mPaymentParams = new PaymentParams();
