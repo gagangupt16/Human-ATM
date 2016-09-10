@@ -7,10 +7,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.firebase.messaging.FirebaseMessaging;
+
 public class MainActivity extends AppCompatActivity {
 
-    private EditText mAmountView;
+    private static final String GIVER_TOPIC = "giver";
+    private static final String REQUEST_TOPIC = "request";
 
+    private EditText mAmountView;
     private RequestTask mRequestTask;
 
     @Override
@@ -27,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
                 requestAmount();
             }
         });
+        FirebaseMessaging.getInstance().subscribeToTopic(GIVER_TOPIC);
+        FirebaseMessaging.getInstance().subscribeToTopic(REQUEST_TOPIC);
     }
 
     private void requestAmount() {
