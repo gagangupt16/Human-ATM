@@ -103,9 +103,7 @@ public class PaymentMainActivity extends AppCompatActivity implements View.OnCli
 
         Payu.setInstance(this);
         bundle = getIntent().getExtras();
-        float amount = 10;
-        if(bundle!=null)
-        amount = bundle.getFloat("amount");
+        float amount = getIntent().getFloatExtra("amount",10);
 
         // lets set up the tool bar;
 //        toolBar = (Toolbar) findViewById(R.id.app_bar);

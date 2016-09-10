@@ -1,5 +1,6 @@
 package com.example.gg_zapr.humanatm;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -73,6 +74,10 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(final Boolean success) {
             mRequestTask = null;
             System.out.print("Request successful");
+            Intent intent = new Intent(getApplicationContext(),GiverListActivity.class);
+            intent.putExtra("amount",mAmount);
+            startActivity(intent);
+
 //            showProgress(false);
 //
 //            if (success) {
