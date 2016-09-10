@@ -19,5 +19,6 @@
     <string name="request_amount">Request</string>
     <string name="send">send</string>
     <string name="preference_file_key">shared_pref_file</string>
-    <string name="need_help">Someone needs your help</string>
+    <string name="need_help">Help required</string>
+    <string name="transferred">Transferred</string>
 </resources>
