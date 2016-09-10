@@ -17,4 +17,5 @@
         completions."
     </string>
     <string name="request_amount">Request</string>
+    <string name="send">send</string>
 </resources>

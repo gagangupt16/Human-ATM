@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "418165502234",
+    "firebase_url": "https://still-habitat-123907.firebaseio.com",
+    "project_id": "still-habitat-123907",
+    "storage_bucket": "still-habitat-123907.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:418165502234:android:c68b35f109992296",
+        "android_client_info": {
+          "package_name": "com.example.gg_zapr.humanatm"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "418165502234-cm148pfqhramjqp4rdc9ov3mm3sm9sbu.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "418165502234-d0ng5untnt93srarkb0a65e9h05r06l9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4AKzGubf6vdxrukJnr7YAF5pbEg05Fq8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
