@@ -59,6 +59,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!--<activity android:name=".PaymentMainActivity"></activity>-->
+        <!--<activity android:name=".GiverDetailActivity"></activity>-->
+        <!--<activity android:name=".GiverListActivity"></activity>-->
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyBtej5mKsv1W9gWVhKU_vrLoyXY7Kg_OaY"/>
     </application>
 
 </manifest>
