@@ -1,5 +1,7 @@
 package com.example.gg_zapr.humanatm;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -23,6 +25,11 @@ public class ATMFirebaseInstanceIDService extends FirebaseInstanceIdService {
         //Displaying token on logcat
         Log.i(TAG, "Refreshed token: " + refreshedToken);
 
+        SharedPreferences sharedPref = this.getSharedPreferences(
+            getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(Constants.GCM_ID, refreshedToken);
+        editor.apply();
     }
 
     private void sendRegistrationToServer(String token) {

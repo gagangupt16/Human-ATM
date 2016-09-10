@@ -3,7 +3,9 @@ package com.example.gg_zapr.humanatm;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -20,6 +22,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -29,6 +32,9 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -42,6 +48,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.Manifest.permission.READ_CONTACTS;
+import static com.example.gg_zapr.humanatm.Constants.GCM_ID;
 
 /**
  * A login screen that offers login via email/password.
@@ -60,6 +67,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private static final String[] DUMMY_CREDENTIALS = new String[]{
             "foo@example.com:hello", "bar@example.com:world"
     };
+    private static final String TAG = "LoginActivity";
 
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
@@ -73,7 +81,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private EditText mNameView;
     private View mProgressView;
     private View mLoginFormView;
-    private String BASE_URL = "http://100.96.245.45:8080/atmApp/";
+    private String BASE_URL = "http://52.66.76.35:8080/atmApp/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -211,7 +219,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password, phoneNumber, name);
+            mAuthTask = new UserLoginTask(email, password, phoneNumber, name, this);
             mAuthTask.execute((Void) null);
         }
     }
@@ -335,82 +343,89 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         private final String mPassword;
         private final String mPhoneNumber;
         private final String mName;
+        private final Context mContext;
 
-        UserLoginTask(String email, String password, String phoneNumber, String name) {
+        UserLoginTask(String email, String password, String phoneNumber, String name, Context context) {
             mEmail = email;
             mPassword = password;
             mPhoneNumber = phoneNumber;
             mName = name;
+            mContext = context;
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
 
-            return true;
+            SharedPreferences sharedPref = mContext.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+            String gcmId = sharedPref.getString(GCM_ID, null);
+            
+            Log.i(TAG, "Retrieved GCM ID: " + gcmId);
 
-//            HttpURLConnection connection;
-//            URL url;
-//
-//            String dataUrlParameters = String.format("phonenumber=%s&password=%s&email=%s&name=%s", mPhoneNumber, mPassword,mEmail,mName);
-//
-//            try{
-//                url = new URL(BASE_URL + "registerUser");
-//                connection = (HttpURLConnection) url.openConnection();
-//                connection.setRequestMethod("POST");
-//
-//                DataOutputStream wr = new DataOutputStream(
-//                        connection.getOutputStream());
-//                wr.writeBytes(dataUrlParameters);
-//                wr.flush();
-//                wr.close();
-//
-//                if (connection.getResponseCode() == HttpURLConnection.HTTP_OK){
-//                    System.out.print("Matched");
-//                    return true;
-//                } else {
-//                    System.out.print("Unmatched");
-//                    return false;
-//                }
-//
-////                // Get Response
-////                InputStream is = connection.getInputStream();
-////                BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-////                String line;
-////                StringBuffer response = new StringBuffer();
-////
-////                while ((line = reader.readLine()) != null) {
-////                    response.append(line);
-////                    response.append('\r');
-////                }
-////
-////                reader.close();
-////                String responseStr = response.toString();
-////                System.out.print(responseStr);
-//
-//            } catch (MalformedURLException e) {
-//                e.printStackTrace();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//
-//            try {
-//                // Simulate network access.
-//                Thread.sleep(2000);
-//            } catch (InterruptedException e) {
-//                return false;
-//            }
-//
-//            for (String credential : DUMMY_CREDENTIALS) {
-//                String[] pieces = credential.split(":");
-//                if (pieces[0].equals(mEmail)) {
-//                    // Account exists, return true if the password matches.
-//                    return pieces[1].equals(mPassword);
-//                }
-//            }
-//
-//            // TODO: register the new account here.
-//            return true;
+            HttpURLConnection connection;
+            URL url;
+
+            try{
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.accumulate("phoneNumber", mPhoneNumber);
+                jsonObject.accumulate("password", mPassword);
+                jsonObject.accumulate("email", mEmail);
+                jsonObject.accumulate("username", mName);
+                jsonObject.accumulate("gcmId", gcmId);
+
+                String json = jsonObject.toString();
+
+                Log.i(TAG, json);
+
+                url = new URL(BASE_URL + "registerUser");
+                connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("POST");
+                connection.setRequestProperty("Content-Type", "application/json");
+
+
+                DataOutputStream wr = new DataOutputStream(
+                        connection.getOutputStream());
+                wr.writeBytes(json);
+                wr.flush();
+                wr.close();
+
+                if (connection.getResponseCode() == HttpURLConnection.HTTP_OK){
+                                    // Get Response
+                    InputStream is = connection.getInputStream();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+                    String line;
+                    StringBuffer response = new StringBuffer();
+
+                    while ((line = reader.readLine()) != null) {
+                        response.append(line);
+                        response.append('\r');
+                    }
+
+                    reader.close();
+                    String responseStr = response.toString();
+
+                    JSONObject responseObject = new JSONObject(responseStr);
+
+                    String userId = responseObject.getString("userId");
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putString("userId", userId);
+                    editor.apply();
+
+                    Log.i(TAG, "Matched: "+ responseStr);
+                    return true;
+                } else {
+                    Log.e(TAG, "Unmatched");
+                    return false;
+                }
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return false;
         }
 
         @Override
