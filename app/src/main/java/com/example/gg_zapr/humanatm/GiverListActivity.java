@@ -64,17 +64,7 @@ public class GiverListActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-//        while(!isStop) {
-//
-//            try {
-//                Thread.sleep(2000);
-//                getGivers();
-//            } catch (ExecutionException e) {
-//                e.printStackTrace();
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        }
+
         try {
             getGivers();
         } catch (ExecutionException e) {
