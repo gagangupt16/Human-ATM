@@ -65,7 +65,7 @@ public class GiverListActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                
+
                 Intent intent = new Intent(getApplicationContext(), GiverDetailActivity.class);
                 intent.putExtra("giver", givers.get(position));
                 intent.putExtra("amount", amount);

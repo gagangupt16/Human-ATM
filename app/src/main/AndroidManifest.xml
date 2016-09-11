@@ -55,6 +55,7 @@
         </activity>
         <activity android:name=".PaymentMainActivity"></activity>
         <activity android:name=".GiverDetailActivity"></activity>
+        <activity android:name=".FinalActivity"></activity>
 
         <activity android:name=".GiverListActivity">
             <!--<intent-filter>-->

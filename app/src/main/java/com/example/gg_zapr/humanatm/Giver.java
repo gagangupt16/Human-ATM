@@ -12,4 +12,5 @@ public class Giver implements Serializable {
     public Double lat;
     public Double lon;
     public boolean isFb;
+    public double premium;
 }
