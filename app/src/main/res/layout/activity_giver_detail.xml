@@ -12,6 +12,8 @@
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:layout_gravity="center_horizontal"
+        android:background="@color/atmcolorAccent"
+        android:textColor="@color/white"
         android:text="@string/send"
         android:id="@+id/send"/>
 

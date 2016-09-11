@@ -168,6 +168,11 @@ public class GiverListActivity extends AppCompatActivity {
 
                     JSONArray jsonarray = new JSONArray(responseStr);
                     for (int i = 0; i < jsonarray.length(); i++) {
+
+                        if (jsonarray.isNull(i)){
+                            continue;
+                        }
+
                         JSONObject jsonobject = jsonarray.getJSONObject(i);
                         String id = jsonobject.getString("userId");
                         String name = jsonobject.getString("name");

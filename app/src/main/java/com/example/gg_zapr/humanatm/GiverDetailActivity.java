@@ -35,7 +35,7 @@ public class GiverDetailActivity extends AppCompatActivity implements View.OnCli
         Button button = (Button) findViewById(R.id.send);
         float amount = getIntent().getFloatExtra("amount", 0);
         float total = amount + amount*SERVICE_CHARGE;
-        button.setText(String.format("Send %.2f", total));
+        button.setText(String.format("Send Rs. %.2f", total));
 
         button.setOnClickListener(this);
         SupportMapFragment mapFragment =
