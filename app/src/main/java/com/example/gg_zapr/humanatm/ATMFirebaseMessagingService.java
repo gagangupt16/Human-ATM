@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -146,6 +147,8 @@ public class ATMFirebaseMessagingService extends FirebaseMessagingService {
                             (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
                     notificationManager.cancel(0);
+
+                    Toast.makeText(this, "We will let the person know you are ready. :)", Toast.LENGTH_SHORT);
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
