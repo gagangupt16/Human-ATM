@@ -141,6 +141,11 @@ public class ATMFirebaseMessagingService extends FirebaseMessagingService {
                     } else {
                         Log.e(TAG, "help request failed");
                     }
+
+                    NotificationManager notificationManager =
+                            (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+                    notificationManager.cancel(0);
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 } catch (IOException e) {

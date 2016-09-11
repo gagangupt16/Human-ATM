@@ -74,9 +74,10 @@ public class GiverDetailActivity extends AppCompatActivity implements View.OnCli
 //        googleMap.setMyLocationEnabled(true);
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 16));
         googleMap.addMarker(new MarkerOptions()
-//                .title("Sydney")
-//                .snippet("The most populous city in Australia.")
-                .position(sydney));
+                .title(giver.name)
+                .snippet("Provider's location")
+                .position(sydney))
+                .showInfoWindow();
 ;
 //
     }
