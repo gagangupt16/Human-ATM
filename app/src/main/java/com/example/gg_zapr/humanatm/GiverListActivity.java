@@ -117,7 +117,7 @@ public class GiverListActivity extends AppCompatActivity {
 //            return givers;
 
             try {
-                Thread.sleep(9000);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -168,10 +168,6 @@ public class GiverListActivity extends AppCompatActivity {
 
                     JSONArray jsonarray = new JSONArray(responseStr);
                     for (int i = 0; i < jsonarray.length(); i++) {
-
-                        if (jsonarray.isNull(i)){
-                            continue;
-                        }
                         JSONObject jsonobject = jsonarray.getJSONObject(i);
                         String id = jsonobject.getString("userId");
                         String name = jsonobject.getString("name");

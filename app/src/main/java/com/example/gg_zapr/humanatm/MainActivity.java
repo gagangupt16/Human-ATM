@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.firebase.messaging.FirebaseMessaging;
 
@@ -22,6 +23,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.ExecutionException;
 
 import static com.example.gg_zapr.humanatm.Constants.GCM_ID;
 
@@ -45,14 +47,25 @@ public class MainActivity extends AppCompatActivity {
         requestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                requestAmount();
+                try {
+                    Log.i(MainActivity.class.getName(),"Setting listener");
+                    requestAmount();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         });
         FirebaseMessaging.getInstance().subscribeToTopic(GIVER_TOPIC);
         FirebaseMessaging.getInstance().subscribeToTopic(REQUEST_TOPIC);
+        boolean paymentSuccess = getIntent().getBooleanExtra("payment",false);
+        if(paymentSuccess) {
+            Toast.makeText(this, "Payment Successful", Toast.LENGTH_LONG).show();
+        }
     }
 
-    private void requestAmount() {
+    private void requestAmount() throws ExecutionException, InterruptedException {
 
         if (mRequestTask!=null){
             return;
@@ -61,7 +74,8 @@ public class MainActivity extends AppCompatActivity {
         String amount = mAmountView.getText().toString();
 
         mRequestTask = new RequestTask(Float.parseFloat(amount), this);
-        mRequestTask.execute((Void)null);
+        Log.i(MainActivity.class.getName(),"Executing task");
+        mRequestTask.execute((Void)null).get();
     }
 
     private class RequestTask extends AsyncTask<Void, Void, Boolean> {

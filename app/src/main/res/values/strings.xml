@@ -16,9 +16,11 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
-    <string name="request_amount">Request</string>
+    <string name="request_amount">Request for Cash</string>
+    <string name="amount">Amount</string>
     <string name="send">Send Money</string>
     <string name="preference_file_key">shared_pref_file</string>
     <string name="need_help">Help required</string>
     <string name="transferred">Transferred</string>
+    <string name="facebook_app_id">517756595101620</string>
 </resources>
