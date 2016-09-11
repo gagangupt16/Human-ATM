@@ -23,15 +23,20 @@ public class GiverDetailActivity extends AppCompatActivity implements View.OnCli
     private String googleMapsLink = "https://www.google.co.in/maps/@%f,%fz";
     private TextView mMapTextView;
     private Giver giver;
+
+    private final Float SERVICE_CHARGE = 0.05f;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_giver_detail);
 
-         giver = (Giver) getIntent().getSerializableExtra("giver");
-        mMapTextView = (TextView) findViewById(R.id.mapLink);
-        mMapTextView.setText(String.format(googleMapsLink, giver.lat, giver.lon));
+        giver = (Giver) getIntent().getSerializableExtra("giver");
         Button button = (Button) findViewById(R.id.send);
+        float amount = getIntent().getFloatExtra("amount", 0);
+        float total = amount + amount*SERVICE_CHARGE;
+        button.setText(String.format("Send %.2f", total));
+
         button.setOnClickListener(this);
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -51,8 +56,8 @@ public class GiverDetailActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-//        LatLng sydney = new LatLng(giver.lat, giver.lon);
-       LatLng sydney = new LatLng(12.971599,77.594563);
+        LatLng sydney = new LatLng(giver.lat, giver.lon);
+       //LatLng sydney = new LatLng(12.971599,77.594563);
 //        LatLng sydney = new LatLng(-33.867, 151.206);
 
 //

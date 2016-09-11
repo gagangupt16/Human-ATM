@@ -49,7 +49,7 @@ public class GiverListActivity extends AppCompatActivity {
 
         mGiverList = (ListView) findViewById(R.id.giverListView);
         mGiverList.setAdapter(adapter);
-        final float amount = getIntent().getFloatExtra("amount",0);
+        final float amount = getIntent().getFloatExtra("amount", 0);
 
         mGiverList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -98,6 +98,28 @@ public class GiverListActivity extends AppCompatActivity {
         }
         @Override
         protected List<Giver> doInBackground(Void... voids) {
+
+//            List<Giver> givers = new ArrayList<>();
+//            Giver giver = new Giver();
+//            giver.id = "id1";
+//            giver.name = "Normal friend";
+//            giver.distance = 400d;
+//            giver.lat = 12.971599;
+//            giver.lon = 77.594563;
+//
+//            Giver giver2 = new Giver();
+//            giver2.id = "id2";
+//            giver2.name = "FB friend";
+//            giver2.distance = 400d;
+//            giver2.lat = 12.971599;
+//            giver2.lon = 77.594563;
+//            giver2.isFb = true;
+//
+//            givers.add(giver);
+//            givers.add(giver2);
+
+//            return givers;
+
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
@@ -167,6 +189,16 @@ public class GiverListActivity extends AppCompatActivity {
                         givers.add(giver);
                     }
 
+                    Giver giver2 = new Giver();
+                    giver2.id = "id2";
+                    giver2.name = "Rajat Gupta";
+                    giver2.distance = 400d;
+                    giver2.lat = 12.971599;
+                    giver2.lon = 77.594563;
+                    giver2.isFb = true;
+
+                    givers.add(giver2);
+
                     return givers;
 
                 } else {
@@ -183,6 +215,7 @@ public class GiverListActivity extends AppCompatActivity {
 
             return null;
         }
+
         protected void onPostExecute(List<Giver> result) {
 
             if (result!= null){
