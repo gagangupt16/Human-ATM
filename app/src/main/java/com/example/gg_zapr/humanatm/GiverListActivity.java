@@ -117,7 +117,7 @@ public class GiverListActivity extends AppCompatActivity {
 //            return givers;
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(9000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
