@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -35,8 +36,15 @@ public class GiverArrayAdapter extends ArrayAdapter<Giver> {
         View rowView = inflater.inflate(R.layout.activity_giver_single, parent, false);
         TextView nameView = (TextView) rowView.findViewById(R.id.name);
         TextView distView = (TextView) rowView.findViewById(R.id.distance);
-        nameView.setText(values.get(position).name);
-        distView.setText(values.get(position).distance.toString());
+
+        Giver giver = values.get(position);
+
+        nameView.setText(giver.name);
+        distView.setText(giver.distance.toString() + " m");
+        ImageView imageView = (ImageView) rowView.findViewById(R.id.fbicon);
+        if (giver.isFb == false){
+            imageView.setImageIcon(null);
+        }
 
         return rowView;
     }
