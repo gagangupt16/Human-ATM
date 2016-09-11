@@ -6,8 +6,10 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -45,6 +47,14 @@ public class GiverListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_giver_list);
+        setTitle(getString(R.string.providers));
+
+//        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+//        setSupportActionBar(myToolbar);
+        //myToolbar.setTitleTextColor(getResources().getColor(R.color.white));
+        //myToolbar.setTitleTextAppearance(this, R.style.TransparentTitleTheme);
+        //getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.activity_giver_list);
+
         adapter = new GiverArrayAdapter(this, givers);
 
         mGiverList = (ListView) findViewById(R.id.giverListView);

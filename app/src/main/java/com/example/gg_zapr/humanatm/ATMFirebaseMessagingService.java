@@ -156,9 +156,6 @@ public class ATMFirebaseMessagingService extends FirebaseMessagingService {
                             Toast.makeText(getApplicationContext(), "We will let the person know you are ready. :)", Toast.LENGTH_LONG).show();
                         }
                     });
-
-
-
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
