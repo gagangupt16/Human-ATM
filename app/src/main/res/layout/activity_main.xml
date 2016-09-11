@@ -23,10 +23,11 @@
                 android:id="@+id/amount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/request_amount"
+                android:hint="@string/amount"
                 android:inputType="text|numberDecimal"
                 android:maxLines="1"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:layout_gravity="center_vertical"/>
 
         </android.support.design.widget.TextInputLayout>
 
@@ -37,7 +38,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="@string/request_amount"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:layout_gravity="center_vertical"/>
 
     </LinearLayout>
 

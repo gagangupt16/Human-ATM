@@ -56,8 +56,8 @@ public class GiverListActivity extends AppCompatActivity {
                                     int position, long id) {
 
 
-                Toast.makeText(getApplicationContext(),
-                        "Giver " + position, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(),
+//                        "Giver " + position, Toast.LENGTH_SHORT).show();
 
                 Intent intent = new Intent(getApplicationContext(), GiverDetailActivity.class);
                 intent.putExtra("giver", givers.get(position));
@@ -104,6 +104,7 @@ public class GiverListActivity extends AppCompatActivity {
             testGiver.distance = 0.5;
             testGiver.lat = 23D;
             testGiver.lon = 67D;
+            testGiver.id="123";
 
             List<Giver> givers = new ArrayList<>();
             givers.add(testGiver);

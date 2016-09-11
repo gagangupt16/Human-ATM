@@ -45,6 +45,7 @@ public class GiverDetailActivity extends AppCompatActivity implements View.OnCli
             float amount = getIntent().getFloatExtra("amount", 0);
             Intent intent = new Intent(this, PaymentMainActivity.class);
             intent.putExtra("amount", amount);
+            intent.putExtra("giverId",giver.id);
             startActivity(intent);
         }
     }

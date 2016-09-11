@@ -1,12 +1,15 @@
 package com.example.gg_zapr.humanatm;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,8 +36,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -42,6 +48,9 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.concurrent.ExecutionException;
+
+import static com.example.gg_zapr.humanatm.Constants.GCM_ID;
 
 
 public class PaymentMainActivity extends AppCompatActivity implements View.OnClickListener, OneClickPaymentListener {
@@ -94,6 +103,8 @@ public class PaymentMainActivity extends AppCompatActivity implements View.OnCli
     Bundle bundle;
     EditText leftChild;
     EditText rightChild;
+    String giverId;
+    float amount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +114,8 @@ public class PaymentMainActivity extends AppCompatActivity implements View.OnCli
 
         Payu.setInstance(this);
         bundle = getIntent().getExtras();
-        float amount = getIntent().getFloatExtra("amount",10);
+        amount = getIntent().getFloatExtra("amount", 10);
+        giverId = getIntent().getStringExtra("giverId");
 
         // lets set up the tool bar;
 //        toolBar = (Toolbar) findViewById(R.id.app_bar);
@@ -177,35 +189,6 @@ public class PaymentMainActivity extends AppCompatActivity implements View.OnCli
             if (requestCode == PayuConstants.PAYU_REQUEST_CODE) {
                 if (data != null) {
 
-
-//                String jsonString;
-//
-//                if (data.getStringExtra(PayuConstants.MERCHANT_HASH) != null) {
-//                    jsonString = data.getStringExtra(PayuConstants.MERCHANT_HASH);
-//                }else {
-//                    jsonString = data.getStringExtra(PayuConstants.PAYU_RESPONSE);
-//                }
-//
-//                if (storeOneClickHash == PayuConstants.STORE_ONE_CLICK_HASH_SERVER) {
-//                    try {
-//                        JSONObject jsonObject = new JSONObject(jsonString);
-//
-//
-//                        if (jsonObject.has(PayuConstants.CARD_TOKEN) && jsonObject.has(PayuConstants.MERCHANT_HASH)) { // we have merchant hash, lets store it merchant server. card_merchant_param && cardToken
-//                            storeMerchantHash(jsonObject.getString(PayuConstants.CARD_TOKEN), jsonObject.getString(PayuConstants.MERCHANT_HASH));
-//                        }
-//
-//
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//
-//
-//                    }
-//                }
-
-
                     new AlertDialog.Builder(this)
 //                        .setCancelable(false)
 //                        .setMessage("Payu's Data : " + data.getStringExtra("payu_response") + "\n\n\n Merchant's Data: " + data.getStringExtra("result"))
@@ -231,8 +214,110 @@ public class PaymentMainActivity extends AppCompatActivity implements View.OnCli
                         }
                     }).show();
         }
+        try {
+            new SuccessTask(amount,giverId).execute().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
         Intent intent = new Intent(this,MainActivity.class);
+        intent.putExtra("payment",true);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
+    }
+    class SuccessTask extends AsyncTask<Void, Void, Boolean> {
+
+        private final float amount;
+        private final String  fulfillerId;
+
+        public SuccessTask(float amount, String fulfillerId) {
+            this.amount = amount;
+            this.fulfillerId = fulfillerId;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            // TODO: attempt authentication against a network service.
+
+            HttpURLConnection connection;
+            URL url;
+
+            try{
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.accumulate("fulfillerId", Integer.parseInt(fulfillerId));
+                jsonObject.accumulate("amount", amount);
+                String json = jsonObject.toString();
+
+               Log.i(PaymentMainActivity.class.getName(), json);
+
+                url = new URL(Constants.BASE_URL + "ackTransactionSuccess");
+                connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("POST");
+                connection.setRequestProperty("Content-Type", "application/json");
+
+
+                DataOutputStream wr = new DataOutputStream(
+                        connection.getOutputStream());
+                wr.writeBytes(json);
+                wr.flush();
+                wr.close();
+
+                if (connection.getResponseCode() == HttpURLConnection.HTTP_OK){
+
+                    InputStream is = connection.getInputStream();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+                    String line;
+                    StringBuffer response = new StringBuffer();
+
+                    while ((line = reader.readLine()) != null) {
+                        response.append(line);
+                        response.append('\r');
+                    }
+
+                    reader.close();
+                    String responseStr = response.toString();
+
+
+                    Log.i(PaymentMainActivity.class.getName(), "Matched: "+ responseStr);
+                    return true;
+                } else {
+                    Log.e(PaymentMainActivity.class.getName(), "Unmatched");
+                    return false;
+                }
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return true;
+        }
+
+//        @Override
+//        protected void onPostExecute(final Boolean success) {
+//            mAuthTask = null;
+//            showProgress(false);
+//
+//            if (success) {
+//                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+//                startActivity(intent);
+//                finish();
+//            } else {
+//                mPasswordView.setError(getString(R.string.error_incorrect_password));
+//                mPasswordView.requestFocus();
+//            }
+//        }
+//
+//        @Override
+//        protected void onCancelled() {
+//            mAuthTask = null;
+//            showProgress(false);
+//        }
+
     }
 
     @Override
@@ -259,7 +344,7 @@ public class PaymentMainActivity extends AppCompatActivity implements View.OnCli
 
     private void navigateToBaseActivity(float amount){
         String mandatoryKeys[] = { PayuConstants.KEY, PayuConstants.AMOUNT, PayuConstants.PRODUCT_INFO, PayuConstants.FIRST_NAME, PayuConstants.EMAIL, PayuConstants.TXNID, PayuConstants.SURL, PayuConstants.FURL, PayuConstants.USER_CREDENTIALS, PayuConstants.UDF1, PayuConstants.UDF2, PayuConstants.UDF3, PayuConstants.UDF4, PayuConstants.UDF5, PayuConstants.ENV, PayuConstants.STORE_ONE_CLICK_HASH, PayuConstants.SMS_PERMISSION};
-        String mandatoryValues[] = { merchantKey, "10.0", "myproduct", "firstname", "me@itsme.com", ""+System.currentTimeMillis(), "http://52.66.76.35:16080/atmApp/dummy", "https://payu.herokuapp.com/failure", merchantKey+":payutest@payu.in", "udf1", "udf2", "udf3", "udf4", "udf5", ""+env, ""+ PayuConstants.STORE_ONE_CLICK_HASH_SERVER, smsPermission.toString() };
+        String mandatoryValues[] = { merchantKey, "10.0", "myproduct", "firstname", "me@itsme.com", ""+System.currentTimeMillis(), Constants.BASE_URL+"dummy", "https://payu.herokuapp.com/failure", merchantKey+":payutest@payu.in", "udf1", "udf2", "udf3", "udf4", "udf5", ""+env, ""+ PayuConstants.STORE_ONE_CLICK_HASH_SERVER, smsPermission.toString() };
         intent = new Intent(this, PayUBaseActivity.class);
 //        LinearLayout rowContainerLayout = (LinearLayout) findViewById(R.id.linear_layout_row_container);
         mPaymentParams = new PaymentParams();
