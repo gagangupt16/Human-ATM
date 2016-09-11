@@ -40,7 +40,7 @@ public class GiverArrayAdapter extends ArrayAdapter<Giver> {
         Giver giver = values.get(position);
 
         nameView.setText(giver.name);
-        distView.setText(giver.distance.toString() + " m");
+        distView.setText(giver.distance.toString() + " m away. Giving at 5% premium");
         ImageView imageView = (ImageView) rowView.findViewById(R.id.fbicon);
         if (giver.isFb == false){
             imageView.setImageIcon(null);

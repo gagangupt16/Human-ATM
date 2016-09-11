@@ -222,9 +222,9 @@ public class PaymentMainActivity extends AppCompatActivity implements View.OnCli
             e.printStackTrace();
         }
 
-        Intent intent = new Intent(this,MainActivity.class);
-        intent.putExtra("payment",true);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        Intent intent = new Intent(this,FinalActivity.class);
+//        intent.putExtra("payment",true);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
     class SuccessTask extends AsyncTask<Void, Void, Boolean> {

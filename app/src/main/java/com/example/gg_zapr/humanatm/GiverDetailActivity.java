@@ -34,8 +34,8 @@ public class GiverDetailActivity extends AppCompatActivity implements View.OnCli
         giver = (Giver) getIntent().getSerializableExtra("giver");
         Button button = (Button) findViewById(R.id.send);
         float amount = getIntent().getFloatExtra("amount", 0);
-        float total = amount + amount*SERVICE_CHARGE;
-        button.setText(String.format("Send Rs. %.2f", total));
+         amount = amount + amount*SERVICE_CHARGE;
+        button.setText(String.format("Send Rs. %.2f", amount));
 
         button.setOnClickListener(this);
         SupportMapFragment mapFragment =
@@ -48,9 +48,10 @@ public class GiverDetailActivity extends AppCompatActivity implements View.OnCli
     public void onClick(View v) {
         if (v.getId() == R.id.send) {
             float amount = getIntent().getFloatExtra("amount", 0);
+            amount = amount + amount*SERVICE_CHARGE;
             Intent intent = new Intent(this, PaymentMainActivity.class);
             intent.putExtra("amount", amount);
-            intent.putExtra("giverId",giver.id);
+            intent.putExtra("giverId", giver.id);
             startActivity(intent);
         }
     }
